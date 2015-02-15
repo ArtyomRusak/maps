@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "ViewMap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ViewMap</h2>
+
+<div id="mapDiv"></div>
+
+@section scripts
+{
+    <link rel="stylesheet" href="http://js.arcgis.com/3.12/esri/css/esri.css">
+    <style>
+        html, body, #mapDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+        }
+    </style>
+    <script src="http://js.arcgis.com/3.12/"></script>
+    <script>
+        function CustomClass(baseMap) {
+            this.baseMap = baseMap;
+        }
+
+        var c = new CustomClass("osm");
+
+        require(["esri/map", "dojo/domReady!"], function (Map) {
+            var map = new Map("mapDiv", {
+                center: [-56.049, 38.485],
+                zoom: 3,
+                basemap: c.baseMap
+            });
+        });
+    </script>
+}
