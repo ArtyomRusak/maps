@@ -8,48 +8,19 @@
 <input type="number" id="xCoor" />
 <input type="number" id="yCoor" />
 <input type="button" id="addMarkerBtn" value="Add marker" />
-<div id="mapDiv"></div>
+<input type="button" id="selectMarkers" value="Select Markers" />
+<div id="mapDiv" style="cursor: pointer"></div>
 
 @section scripts
 {
     <link rel="stylesheet" href="http://js.arcgis.com/3.12/esri/css/esri.css">
-    <style>
-        html, body, #mapDiv {
-            padding: 0;
-            margin: 0;
-            height: 100%;
-        }
-    </style>
-    <script src="~/Scripts/arcgis.js"></script>
-    <script>
-        require([
-            "dojo/dom",
-            "dojo/on",
-            "esri/map",
-            "esri/geometry/Point",
-            "esri/symbols/PictureMarkerSymbol",
-            "esri/graphic",
-            "esri/layers/GraphicsLayer",
-            "dojo/domReady!"
-        ], function(dom, on, Map, Point, PictureMarkerSymbol, Graphic, GraphicLayer) {
-            var map = new Map("mapDiv", {
-                center: [-56.049, 38.485],
-                zoom: 3,
-                basemap: "streets"
-            });
-
-            var graphicLayer = new GraphicLayer();
-
-            map.addLayer(graphicLayer);
-
-            on(dom.byId("addMarkerBtn"), "click", function() {
-                var coor = new Point(dom.byId("xCoor").value, dom.byId("yCoor").value);
-                var symbol = new PictureMarkerSymbol("http://www.clker.com/cliparts/I/l/L/S/W/9/map-marker-md.png", 40, 40);
-
-                var graphic = new Graphic(coor, symbol);
-
-                graphicLayer.add(graphic);
-            });
-        });
-    </script>
+<style id="styleDiv">
+  html, body, #mapDiv {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+  }
+</style>
+  <script src="~/Scripts/arcgis.js"></script>
+  <script src="~/Scripts/CustomJs/Init.js"></script>
 }
