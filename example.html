@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Map Drawing</title>
+		<script src="http://open.mapquestapi.com/sdk/js/v7.2.s/mqa.toolkit.js?key=Fmjtd%7Cluu82l6220%2C8n%3Do5-94rsu0"></script>
+		<script type="text/javascript">
+			/*
+			this map draw method places a blanket (div id suppressor) over the map to capture events before making it to the map.
+			i've tried this in several versions of FF, Chrome, and in IE9.
+			*/
+
+			var mapdiv,map,simon,offx,offy; // map element, map object, is the browser lame?, drawing object, horizontal offset, vertical offset
+			var draw=false; // currently drawing flag
+			var simonsdrawring="r"; // shape type defaults to r-ectangle
+			var suppressor=document.createElement('div'); // create a div to block map events, but don't use it until you want to drawr
+				suppressor.id="stopit";
+				suppressor.style.position="absolute";
+				suppressor.style.width="100%";
+				suppressor.style.height="100%";
+				suppressor.style.top="0px";
+				suppressor.style.left="0px";
+				suppressor.style.zIndex="200";
+				suppressor.style.backgroundImage="url(http://developer.mapquest.com/DevNet-Rebrand2-theme/html/themes/mq_theme/images/spacer.gif)";
+				suppressor.onmousedown=suppressorhandler;
+
+			MQA.EventUtil.observe(window,'load',function(){ // init function to get stuff started
+				mapdiv=document.getElementById('map');
+				offx=mapdiv.offsetLeft-mapdiv.scrollLeft;
+				offy=mapdiv.offsetTop-mapdiv.scrollTop;
+				map=new MQA.TileMap(mapdiv,7,{lat:39.743943, lng:-105.020089},'map');
+				MQA.withModule('shapes',function(){});
+			});
+			function cursorLL(evt){ // get cursor offsets
+				var x=(MQA.Util.getBrowserInfo().name=="msie")?window.event.clientX-offx:evt.pageX-offx;
+				var y=(MQA.Util.getBrowserInfo().name=="msie")?window.event.clientY-offy:evt.pageY-offy;// funky if scrolling in IE
+				return map.pixToLL(new MQA.Point(x,y));
+			}
+			function suppressorhandler(e){
+				var cursorll1=cursorLL(e);
+				if(simonsdrawring=="r")simon=new MQA.RectangleOverlay();
+				if(simonsdrawring=="e")simon=new MQA.EllipseOverlay();
+				if(simonsdrawring=="c")simon=new MQA.CircleOverlay();
+				if(simonsdrawring=="l")simon=new MQA.LineOverlay();
+				if(simonsdrawring=="p")simon=new MQA.PolygonOverlay();
+				simon.borderWidth=4;
+				simon.fillColorAlpha=0.5;
+				simon.fillColor="#00ff00"
+				/*
+				you need two points to draw a rectangle or elipse.  get first shape point on click and the second on move.
+				*/
+				if (simonsdrawring=="r"||simonsdrawring=="e"){
+					simon.shapePoints=[cursorll1.lat,cursorll1.lng];
+					suppressor.onmousemove=function(evt){
+						var cursorll2=cursorLL(evt);
+						simon.setShapePoints([
+							/*
+							make sure to get upper left and lower right points set correctly.
+							*/
+							cursorll1.lat>cursorll2.lat?cursorll1.lat:cursorll2.lat,
+							cursorll1.lng<cursorll2.lng?cursorll1.lng:cursorll2.lng,
+							cursorll1.lat<cursorll2.lat?cursorll1.lat:cursorll2.lat,
+							cursorll1.lng>cursorll2.lng?cursorll1.lng:cursorll2.lng
+						]);
+						document.getElementById('duh').innerHTML="<b>Shape Points:</b>"+simon.shapePoints;
+					}
+				}
+				/*
+				you need one point and a radius for a circle.  get shape point on click and the radius on move.
+				*/
+				if (simonsdrawring=="c"){
+					simon.shapePoints=[cursorll1.lat,cursorll1.lng];
+					simon.radius='0';
+					suppressor.onmousemove=function(evt){
+						map.removeShape(simon);
+						simon.radius=MQA.Util.distanceBetween(cursorll1,cursorLL(evt)).toString();
+						map.addShape(simon);
+						document.getElementById('duh').innerHTML="<b>Shape Point:</b>"+simon.shapePoints+" <b>Radius:</b>"+simon.radius;
+					}
+				}
+				/*
+				you need multiple points for lines and polygons.  get shape points on clicks.
+				*/
+				if (simonsdrawring=="l" || simonsdrawring=="p"){
+					simon.shapePoints=[cursorll1.lat,cursorll1.lng];
+					suppressor.onclick=function(evt){
+						var temparray = simon.shapePoints;
+						temparray[simon.shapePoints.length]=cursorLL(evt).lat;
+						temparray[simon.shapePoints.length]=cursorLL(evt).lng;
+						simon.shapePoints=temparray;
+						map.removeShape(simon);
+						map.addShape(simon);
+						document.getElementById('duh').innerHTML="<b>Shape Points:</b>"+simon.shapePoints;
+					}
+					suppressor.ondblclick=function(){
+						suppressor.onclick=suppressorhandler;
+					}
+				}
+				map.addShape(simon);
+				suppressor.onmouseup=function(evt){
+					suppressor.onmousemove=null;
+					suppressor.onmouseup=null;
+					mapdiv.removeChild(suppressor);
+					mapdiv.appendChild(suppressor);
+				}
+			}
+			function changeoverlaytype(chooser){
+				simonsdrawring=chooser.value;
+				if (simonsdrawring=="r" || simonsdrawring=="e" || simonsdrawring=="c"){
+					suppressor.onmousedown=suppressorhandler;
+					suppressor.onclick=null;
+				}else{
+					suppressor.onmousedown=null;
+					suppressor.onclick=suppressorhandler;
+				}
+			}
+			function toggledraw(btn){
+				if(draw){
+					mapdiv.removeChild(suppressor);
+					btn.value='DRAW!';
+				}else{
+					mapdiv.appendChild(suppressor);
+					btn.value='STOP!';
+				}
+				draw=!draw;
+			}
+		</script>
+	</head>
+	<body>
+
+		<div id="map" style="width:1000px;height:600px;"></div>
+		<div id="desc" style="width:1000px;">
+		<b>Choose shape type and click the DRAW! button.  Click and drag to create a rectangle, ellipse, or a circle.  Release to finish.  Click to place points for a line or polygon.  Double click last point to finish.</b>
+		<select onchange="changeoverlaytype(this);">
+			<option value="r" selected>rectangle</option>
+			<option value="e">ellipse</option>
+			<option value="c">circle</option>
+			<option value="l">line</option>
+			<option value="p">polygon</option>
+		</select>
+		<input type="button" value="DRAW!" onclick="toggledraw(this)" />
+		</div>
+		<div id="duh" style="display:none"></div>
+	</body>
+</html>

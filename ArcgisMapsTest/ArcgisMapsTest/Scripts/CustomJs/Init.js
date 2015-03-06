@@ -54,7 +54,6 @@
     on(selectionToolbar, "DrawEnd", function (geometry) {
       selectionToolbar.deactivate();
 
-      var results = [];
       dojo.forEach(graphicLayer.graphics, function (graphic) {
         if (geometry.contains(graphic.geometry)) {
           graphic.setSymbol(highlightSymbol);

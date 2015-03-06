@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "ViewOpenMap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ViewOpenMap</h2>
+
+<input type="number" id="xCoor"/>
+<input type="number" id="yCoor"/>
+<input type="button" id="addMarkerBtn" value="Add marker" />
+<input type="button" id="selectMarkers" value="Select Markers" />
+<input type="button" id="AddMarkerClickBtn" value="Add button by click"/>
+<div id="map" style="width: 1000px; height: 400px;"></div>
+<div id="route-results"></div>
+
+@section scripts{
+  <script src="~/Scripts/MapQuest.js"></script>
+  <script src="~/Scripts/CustomJs/InitMapQuest.js"></script>
+}

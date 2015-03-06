@@ -6,12 +6,17 @@ using System.Web.Mvc;
 
 namespace ArcgisMapsTest.Controllers
 {
-    public class MapController : Controller
+  public class MapController : Controller
+  {
+    // GET: Map
+    public ActionResult ViewMap()
     {
-        // GET: Map
-        public ActionResult ViewMap()
-        {
-            return View();
-        }
+      return View();
     }
+
+    public ActionResult ViewOpenMap()
+    {
+      return View();
+    }
+  }
 }
