@@ -45,7 +45,7 @@ function suppressorhandler(e) {
   rectangleForChoose.fillColor = "#00ff00";
 
   rectangleForChoose.shapePoints = [cursorll1.lat, cursorll1.lng];
-  suppressor.onmousemove = function (evt) {
+  suppressor.onmousemove = function(evt) {
     var cursorll2 = cursorPosition(evt);
     rectangleForChoose.setShapePoints([
       /*
@@ -56,15 +56,17 @@ function suppressorhandler(e) {
       cursorll1.lat < cursorll2.lat ? cursorll1.lat : cursorll2.lat,
       cursorll1.lng > cursorll2.lng ? cursorll1.lng : cursorll2.lng
     ]);
+    document.getElementById('duh').innerHTML = "<b>Shape Points:</b>" + rectangleForChoose.shapePoints;
+  }
 
-    map.addShape(rectangleForChoose);
+  map.addShape(rectangleForChoose);
     suppressor.onmouseup = function (evt) {
       suppressor.onmousemove = null;
       suppressor.onmouseup = null;
       mapDiv.removeChild(suppressor);
       mapDiv.appendChild(suppressor);
     }
-  }
+  
 }
 
 MQA.withModule('largezoom', 'mousewheel', function () {
@@ -80,7 +82,7 @@ $("#addMarkerBtn").click(function () {
   var poi = new MQA.Poi({ lat: $("#xCoor").val(), lng: $("#yCoor").val() });
   poi.setDeclutterMode(true);
   poi.myInfo = "Hello from " + $("#xCoor").val() + " " + $("#yCoor").val();
-  poi.draggable = true;
+  //poi.draggable = true;
 
   poi.setRolloverContent(poi.myInfo);
 
