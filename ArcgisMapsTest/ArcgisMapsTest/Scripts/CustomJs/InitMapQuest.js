@@ -157,6 +157,10 @@ $("#selectMarkersForRoute").click(function (btn) {
   });
 });
 
+$("#deleteRoute").click(function() {
+  map.removeRoute();
+});
+
 $("#AddMarkerClickBtn").click(function () {
   MQA.withModule('new-route', function () {
     var opt = {
