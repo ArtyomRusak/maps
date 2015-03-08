@@ -2,6 +2,10 @@
 var rectangleForChoose;
 var mapDiv;
 var offx, offy, map;
+var points = new Array();
+var selectedIcon = new MQA.Icon('http://developer.mapquest.com/content/documentation/common/images/smiley.png', 22, 28);
+var defaultIcon = new MQA.Icon('http://icons.mqcdn.com/icons/stop.png', 22, 28);
+
 
 $(function () {
   var options = {
@@ -60,13 +64,31 @@ function suppressorhandler(e) {
   }
 
   map.addShape(rectangleForChoose);
+
     suppressor.onmouseup = function (evt) {
       suppressor.onmousemove = null;
       suppressor.onmouseup = null;
       mapDiv.removeChild(suppressor);
       mapDiv.appendChild(suppressor);
+
+      for (var i = 0; i < points.length; i++) {
+        //if (points[i]) {
+
+        //}
+        var pointLatLng = points[i].latLng;
+        var shapePoints = rectangleForChoose.getShapePoints();
+        if (pointLatLng.lat < shapePoints[0] && pointLatLng.lat > shapePoints[2] && pointLatLng.lng > shapePoints[1] && pointLatLng.lng < shapePoints[3]) {
+          points[i].setIcon(selectedIcon);
+        } else {
+          points[i].setIcon(defaultIcon);
+        }
+        //points[i].setState("red");
+        var state = points[i].getState();
+        var icon = points[i].getIcon();
+
+        map.removeShape(rectangleForChoose);
+      }
     }
-  
 }
 
 MQA.withModule('largezoom', 'mousewheel', function () {
@@ -87,15 +109,16 @@ $("#addMarkerBtn").click(function () {
   poi.setRolloverContent(poi.myInfo);
 
   map.addShape(poi);
+  points.push(poi);
 });
 
 $("#selectMarkers").click(function (btn) {
   if (draw) {
     mapDiv.removeChild(suppressor);
-    btn.value = 'DRAW!';
+    btn.target.value = 'Select';
   } else {
     mapDiv.appendChild(suppressor);
-    btn.value = 'STOP!';
+    btn.target.value = 'Stop';
   }
   draw = !draw;
 });
