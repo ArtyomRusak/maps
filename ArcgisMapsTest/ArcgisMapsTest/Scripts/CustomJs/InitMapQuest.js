@@ -25,6 +25,14 @@ $(function () {
   map = new MQA.TileMap(options);
   MQA.EventManager.addListener(map, 'click', addButtonByClick);
   MQA.withModule('shapes', function () { });
+  MQA.withModule('largezoom', 'mousewheel', function () {
+    map.addControl(
+      new MQA.LargeZoom(),
+      new MQA.MapCornerPlacement(MQA.MapCorner.TOP_LEFT, new MQA.Size(5, 5))
+    );
+
+    map.enableMouseWheelZoom();
+  });
 });
 
 function addButtonByClick(evt) {
@@ -35,7 +43,17 @@ function addButtonByClick(evt) {
 
   poi.setRolloverContent(poi.myInfo);
 
+  MQA.EventManager.addListener(map, 'infowindowopen', function() {
+    var btn = $("#myBtn");
+    btn.click(function (evtParam) {
+      //var r = evtParam;
+      map.removeShape(poi);
+    });
+  });
+
   map.addShape(poi);
+  poi.setInfoContentHTML("<button id='myBtn' "+ "pointId='" + poi["$mqa.id$"] + "'>Remove</button>");
+
   points.push(poi);
 };
 
@@ -107,15 +125,6 @@ function suppressorhandler(e) {
     }
   }
 }
-
-MQA.withModule('largezoom', 'mousewheel', function () {
-  map.addControl(
-    new MQA.LargeZoom(),
-    new MQA.MapCornerPlacement(MQA.MapCorner.TOP_LEFT, new MQA.Size(5, 5))
-  );
-
-  map.enableMouseWheelZoom();
-});
 
 $("#addMarkerBtn").click(function () {
   var poi = new MQA.Poi({ lat: $("#xCoor").val(), lng: $("#yCoor").val() });
