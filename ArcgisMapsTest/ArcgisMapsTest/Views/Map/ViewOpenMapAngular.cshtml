@@ -1,0 +1,32 @@
+﻿@{
+  ViewBag.Title = "ViewOpenMap";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ViewOpenMap</h2>
+
+@*<input type="number" id="xCoor" />
+  <input type="number" id="yCoor" />
+  <input type="button" id="addMarkerBtn" value="Add marker" />
+  <input type="button" id="addMarkerByClickBtn" value="Add marker by click" />
+  <input type="button" id="selectMarkers" value="Select" />
+  <input type="button" id="selectMarkersForRoute" value="Select markers for route" />
+  <input type="button" id="deleteRoute" value="Delete Route" />
+  <input type="button" id="AddMarkerClickBtn" value="Add button by click" />*@
+
+<div id="mainPage" ng-app="TestMaps">
+  <div id="body" ng-controller="TestMapsController">
+    <div id="map" style="width: 1000px; height: 400px;"></div>
+    
+
+  </div>
+</div>
+@*<div id="route-results"></div>
+  <div id="duh"></div>*@
+
+@section scripts{
+  <script src="~/Scripts/angular.js"></script>
+  <script src="~/Scripts/MapQuest.js"></script>
+  <script src="~/Scripts/CustomJs/InitMapQuest.js"></script>
+  <script src="~/Scripts/CustomJs/MapController.js"></script>
+}

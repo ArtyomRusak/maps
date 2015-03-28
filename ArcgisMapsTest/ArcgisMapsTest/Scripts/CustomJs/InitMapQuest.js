@@ -24,8 +24,7 @@ $(function () {
   offy = mapDiv.offsetTop - mapDiv.scrollTop;
   map = new MQA.TileMap(options);
   MQA.EventManager.addListener(map, 'click', addButtonByClick);
-  MQA.withModule('shapes', function () { });
-  MQA.withModule('largezoom', 'mousewheel', function () {
+  MQA.withModule('shapes', 'largezoom', 'mousewheel', function () {
     map.addControl(
       new MQA.LargeZoom(),
       new MQA.MapCornerPlacement(MQA.MapCorner.TOP_LEFT, new MQA.Size(5, 5))
