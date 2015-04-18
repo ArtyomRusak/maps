@@ -17,8 +17,19 @@
 <div id="mainPage" ng-app="TestMaps">
   <div id="body" ng-controller="TestMapsController">
     <div id="map" style="width: 1000px; height: 400px;"></div>
-    
 
+    <table>
+      <tr>
+        <th>Location</th>
+        <th>Draggable</th>
+        <th>Selected</th>
+      </tr>
+      <tr ng-repeat="marker in markers">
+        <td>{{ marker.lat + "  " + marker.lng }}</td>
+        <td><input type="checkbox" ng-model="marker.draggable" /></td>
+        <td><input type="checkbox" ng-model="marker.selected" /></td>
+      </tr>
+    </table>
   </div>
 </div>
 @*<div id="route-results"></div>
@@ -27,6 +38,7 @@
 @section scripts{
   <script src="~/Scripts/angular.js"></script>
   <script src="~/Scripts/MapQuest.js"></script>
-  <script src="~/Scripts/CustomJs/InitMapQuest.js"></script>
   <script src="~/Scripts/CustomJs/MapController.js"></script>
+  <script src="~/Scripts/CustomJs/TestMapsController.js"></script>
+  <script src="~/Scripts/CustomJs/AngularOpenMaps.js"></script>
 }

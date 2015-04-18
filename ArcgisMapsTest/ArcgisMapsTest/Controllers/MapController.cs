@@ -18,5 +18,10 @@ namespace ArcgisMapsTest.Controllers
     {
       return View();
     }
+
+    public ActionResult ViewOpenMapAngular()
+    {
+      return View();
+    }
   }
 }

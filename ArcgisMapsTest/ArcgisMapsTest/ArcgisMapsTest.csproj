@@ -206,6 +206,9 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\ArcgisTest.pubxml" />
     <None Include="Properties\PublishProfiles\ArcgisTestWork.pubxml" />
+    <Content Include="Scripts\CustomJs\AngularOpenMaps.js" />
+    <Content Include="Scripts\CustomJs\MarkerViewModel.js" />
+    <Content Include="Scripts\CustomJs\PubSub.js" />
     <Content Include="Scripts\CustomJs\TestMapsController.js" />
     <Content Include="Scripts\errors.json" />
     <Content Include="Scripts\angular-touch.min.js.map" />
