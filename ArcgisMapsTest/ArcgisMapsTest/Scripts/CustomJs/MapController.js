@@ -1,7 +1,7 @@
 ﻿var MapController = {};
 (function (controller) {
   controller.map = null;
-  controller.defaultIconImageUrl = "";
+  controller.defaultIconImageUrl = "http://icons.mqcdn.com/icons/stop.png";
   controller.defaultSelectedIconImageUrl = "";
 
   controller.createMap = function (divId, latLng, mtype, options) {

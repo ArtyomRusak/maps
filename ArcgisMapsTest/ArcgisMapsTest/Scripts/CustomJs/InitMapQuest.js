@@ -34,7 +34,7 @@ $(function () {
   });
 });
 
-function addButtonByClick(evt) {
+function addButtonByClick(evt, evt2, evt3) {
   var poi = new MQA.Poi({ lat: evt.ll.lat, lng: evt.ll.lng });
 
   poi.myInfo = "Hello from " + evt.ll.lat + " " + evt.ll.lng;
