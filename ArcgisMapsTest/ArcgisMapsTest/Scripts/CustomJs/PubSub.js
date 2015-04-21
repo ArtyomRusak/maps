@@ -20,8 +20,8 @@
     var subscribers = topics[topic],
       len = subscribers ? subscribers.length : 0;
 
-    while (len--) {
-      subscribers[len].func(topic, args);
+    for (var i = 0; i < len; i++) {
+      subscribers[i].func(topic, args);
     }
 
     return this;

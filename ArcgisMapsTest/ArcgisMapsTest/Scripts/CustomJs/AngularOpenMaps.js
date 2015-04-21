@@ -1,9 +1,7 @@
 ﻿$(function () {
   //var mapsController = new MapController();
   MapController.createMap("map", { lat: 0, lng: 0 }, "map", { zoomOnDoubleCheck: true });
-
   MapController.addListener("click", addMarkerByClickOnMap);
-
   pubsub.subscribe("addMarkerByClickOnMap", addMarkerByClickOnMapAngular);
 
   function addMarkerByClickOnMap(evt) {
@@ -12,7 +10,8 @@
   };
 
   function addMarkerByClickOnMapAngular(topic, marker) {
-    angular.element(document.getElementById("mainBody")).scope().addMarker(marker);
-    angular.element(document.getElementById("mainBody")).scope().$apply();
+    var scope = angular.element(document.getElementById("mainBody")).scope();
+    scope.addMarker(marker);
+    scope.$apply();
   };
 });
