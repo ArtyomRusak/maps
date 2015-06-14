@@ -20,6 +20,7 @@
     <input type="button" id="AddMarkerClickBtn" ng-click="clickBtn()" value="Click for add random point" />
     <div id="map" style="width: 1000px; height: 400px;"></div>
     <table>
+      <thead>Markers</thead>
       <tr>
         <th>Location</th>
         <th>Draggable</th>
@@ -27,8 +28,24 @@
       </tr>
       <tr ng-repeat="marker in markers">
         <td>{{ marker.latLng.lat + " and " + marker.latLng.lng }}</td>
-        <td><input type="checkbox" ng-model="marker.draggable" /></td>
-        <td><input type="checkbox" ng-model="marker.selected" /></td>
+        <td><input type="checkbox" ng-model="marker.draggable" ng-click="makeDraggable(marker)" /></td>
+        <td><input type="checkbox" ng-model="marker.selected" ng-click="makeSelected(marker)" /></td>
+      </tr>
+    </table>
+    
+    <br/>
+    
+    <table ng-show="selectedMarkers.length > 0">
+      <thead>{{ selectedMarkers.length > 0 ? "Selected Markers" : ""}}</thead>
+      <tr>
+        <th>Location</th>
+        <th>Draggable</th>
+        <th>Selected</th>
+      </tr>
+      <tr ng-repeat="marker in selectedMarkers">
+        <td>{{ marker.latLng.lat + " and " + marker.latLng.lng }}</td>
+        <td><input type="checkbox" ng-model="marker.draggable" ng-click="makeDraggable(marker)" /></td>
+        <td><input type="checkbox" ng-model="marker.selected" ng-click="makeSelected(marker)" /></td>
       </tr>
     </table>
   </div>

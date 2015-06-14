@@ -12,6 +12,19 @@
           $scope.markers.push(markerViewModel);
         };
 
+        $scope.makeDraggable = function (marker) {
+          MapController.setDraggableToMarker(marker.markerId, marker.draggable);
+        };
+
+        $scope.makeSelected = function (marker) {
+          MapController.setSelectedForMarker(marker.markerId, marker.selected);
+          if (marker.selected) {
+            $scope.selectedMarkers.push(marker);
+          } else {
+            $scope.selectedMarkers.splice($scope.selectedMarkers.indexOf(marker), 1);
+          }
+        }
+
         $scope.clickBtn = function () {
           $scope.markers.push({ latLng: { lat: 12, lng: 53 }, draggable: true });
         }

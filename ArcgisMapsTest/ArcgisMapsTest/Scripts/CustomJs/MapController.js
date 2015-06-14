@@ -2,7 +2,9 @@
 (function (controller) {
   controller.map = null;
   controller.defaultIconImageUrl = "http://icons.mqcdn.com/icons/stop.png";
-  controller.defaultSelectedIconImageUrl = "";
+  controller.defaultSelectedIconImageUrl = "https://cdn3.iconfinder.com/data/icons/map-markers-2/512/marker_7-128.png";
+  controller.defaultIcon = null;
+  controller.defaultSelectedIcon = null;
 
   controller.createMap = function (divId, latLng, mtype, options) {
     var optionsForMap = {
@@ -17,23 +19,27 @@
     controller.init();
   };
 
-  controller.createMarker = function (lat, lng, imageUrl) {
-    return controller.createMarker({ lat: lat, lng: lng }, imageUrl);
-  };
-
   controller.createMarker = function (latLng, imageUrl) {
     var marker = new MQA.Poi(latLng, new MQA.Icon(imageUrl || controller.defaultIconImageUrl, 22, 28));
     controller.map.addShape(marker);
+    controller.addExtraFieldForMarker(marker["$mqa.id$"], "selected", false);
     return marker;
   };
 
-  controller.setDraggableToMarker = function (marker, draggable) {
-    marker.draggable = draggable;
+  controller.addExtraFieldForMarker = function (markerId, key, value) {
+    var marker = controller.getShapeById(markerId);
+    marker.addExtraField(key, value);
   };
 
   controller.setDraggableToMarker = function (markerId, draggable) {
     var marker = controller.getShapeById(markerId);
-    controller.setDraggableToMarker(marker, draggable);
+    marker.setDraggable(draggable);
+  };
+
+  controller.setSelectedForMarker = function (markerId, selected) {
+    var marker = controller.getShapeById(markerId);
+    marker.setIcon(selected ? controller.getDefaultIconForSelectedMarker() : controller.getDefaultIconForMarker());
+    marker.extraFields.selected = selected;
   };
 
   controller.getShapeById = function (shapeId) {
@@ -54,13 +60,29 @@
     MQA.EventManager.addListener(controller.map, eventName, callback);
   };
 
-  controller.setDefaultIconForMarker = function (url) {
+  controller.setDefaultIconUrlForMarker = function (url) {
     controller.defaultIconImageUrl = url;
   };
 
-  controller.setDefaultIconForSelectedMarker = function (url) {
+  controller.setDefaultIconUrlForSelectedMarker = function (url) {
     controller.defaultSelectedIconImageUrl = url;
   };
+
+  controller.setDefaultIconForMarker = function (imageUrl) {
+    controller.defaultIcon = new MQA.Icon(imageUrl || controller.defaultIconImageUrl, 22, 28);
+  }
+
+  controller.setDefaultIconForSelectedMarker = function (imageUrl) {
+    controller.defaultSelectedIcon = new MQA.Icon(imageUrl || controller.defaultSelectedIconImageUrl, 22, 28);
+  }
+
+  controller.getDefaultIconForMarker = function () {
+    return controller.defaultIcon;
+  }
+
+  controller.getDefaultIconForSelectedMarker = function () {
+    return controller.defaultSelectedIcon;
+  }
 
   controller.init = function () {
     MQA.withModule('shapes', 'largezoom', 'mousewheel', function () {
@@ -70,6 +92,10 @@
       );
 
       controller.map.enableMouseWheelZoom();
+      controller.setDefaultIconUrlForMarker(controller.defaultIconImageUrl);
+      controller.setDefaultIconUrlForSelectedMarker(controller.defaultSelectedIconImageUrl);
+      controller.setDefaultIconForMarker();
+      controller.setDefaultIconForSelectedMarker();
     });
   };
 }(MapController))
