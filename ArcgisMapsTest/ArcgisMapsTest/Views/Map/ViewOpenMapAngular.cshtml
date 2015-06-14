@@ -14,10 +14,11 @@
   <input type="button" id="deleteRoute" value="Delete Route" />
   <input type="button" id="AddMarkerClickBtn" value="Add button by click" />*@
 
+
 <div id="mainPage" ng-app="TestMaps">
   <div id="mainBody" ng-controller="TestMapsController">
+    <input type="button" id="AddMarkerClickBtn" ng-click="clickBtn()" value="Click for add random point" />
     <div id="map" style="width: 1000px; height: 400px;"></div>
-
     <table>
       <tr>
         <th>Location</th>
